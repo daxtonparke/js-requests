@@ -1,6 +1,7 @@
 ////////////////////////////////////////////////
 //THE TEST SERVER IS RUNNING ON LOCALHOST:3000//
-////////////////////////////////////////////////
+////////////////////
+
 
 // PROBLEM 1
 /*
@@ -9,7 +10,7 @@
     Use querySelector to select that button and save it to a variable called sayHelloButton
 */
 
-// CODE HERE
+const sayHelloButton = document.querySelector('#say-hello-button')
 
 
 // PROBLEM 2
@@ -18,9 +19,13 @@
     
     Attach a mouseover event to sayHelloButton that calls the function you wrote
 */
+const mouseOverFunc = () =>{
+    sayHelloButton.style.backgroundColor = "black"
+    sayHelloButton.style.color = "white"
+}
 
-// CODE HERE
 
+sayHelloButton.addEventListener('mouseover', mouseOverFunc )
 
 // PROBLEM 3
 /*
@@ -31,7 +36,12 @@
     Attach another listener that fires your second function when the mouseout event occurs on the button
 */
 
-// CODE HERE
+const mouseOutFunc = () =>{
+    sayHelloButton.style.backgroundColor = "white"
+    sayHelloButton.style.color = "black"
+}
+
+sayHelloButton.addEventListener('mouseout', mouseOutFunc )
 
 
 // PROBLEM 4
@@ -52,8 +62,7 @@ const sayHello = () => {
 }
 // DO NOT EDIT FUNCTION
 
-// CODE HERE
-
+sayHelloButton.addEventListener('click', sayHello)
 
 // PROBLEM 5 
 /*
@@ -67,7 +76,14 @@ const sayHello = () => {
 */ 
 
 const ohMy = () => {
-    // YOUR CODE HERE
+ axios.get('http://localhost:3000/animals')
+ .then((res)=>{
+for (i=0; i<res.data.length; i++){
+    let newElement = document.createElement('p')
+    newElement.textContent = res.data[i]
+    document.body.append(newElement)
+}
+ })
 }
 
 document.getElementById('animals-button').addEventListener('click', ohMy)
@@ -86,9 +102,20 @@ document.getElementById('animals-button').addEventListener('click', ohMy)
     We'll be updating this function in the next problem.
 */
 
+
 const repeatMyParam = () => {
-    //YOUR CODE HERE
+    axios.get('http://localhost:3000/repeat/Hello There Kyle')
+    .then((res)=>{
+        let repeatText = document.getElementById('repeat-text')
+        repeatText.textContent = res.data
+        repeatText.style.display = 'block'
+    })
+
 }
+
+const repeatButton = document.getElementById('repeat-button')
+
+repeatButton.addEventListener('click', repeatMyParam)
 
 // PROBLEM 7
 /*
@@ -110,8 +137,14 @@ const repeatMyParam = () => {
     Outside of your new function, select the button with the id "query-button" and add a click event listener that calls your function.
 */
 
-// CODE HERE
+const queryFunc = () =>{
+    axios.get('http://localhost:3000/query-test')
+    .then((res)=>{
+console.log(res.data)
+    })
+}
 
+document.getElementById('query-button').addEventListener('click', queryFunc)
 
 
 ////////////////
@@ -132,8 +165,9 @@ const repeatMyParam = () => {
     In the function that you wrote for Problem 8, change the URL to test a couple different scenarios. 
 
     1: Send no queries on the URL -- what happened? 
+    error :404
 
-    2: Send more than 1 query on the URL -- what happened? 
+    2: Send more than 1 query on the URL -- what happened? not sure how
 */
 
 // Edit code in Problem 8
@@ -162,5 +196,20 @@ const repeatMyParam = () => {
 
     Based on what we did earlier to display this type of data, write code that will display the response in your HTML document. 
 */
+let foodButton = document.getElementById('food-button')
+let foodInput = document.getElementById('food-input')
 
-// CODE HERE 
+const createFood = () =>{
+    event.preventDefault()
+let body = {
+    newFood: foodInput.value
+}
+axios.post('http://localhost:3000/food', body)
+.then((res)=>{
+console.log(res.data)
+})
+foodInput.value = ''
+}
+
+foodButton.addEventListener('click', createFood)
+
